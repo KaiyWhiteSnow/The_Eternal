@@ -1,8 +1,12 @@
 class Functions:
-    def load_banned_words(file_path):
-        with open(file_path, 'r') as file:
-            banned_words = [word.strip() for word in file.readlines()]
-        return banned_words
+    def load_banned_phrases(file_path):
+        try:
+            with open(file_path, 'r', encoding='utf-8') as file:
+                banned_phrases = [phrase.strip() for phrase in file.read().split(',')]
+            return banned_phrases
+        except UnicodeDecodeError as e:
+            print(f"Error decoding file {file_path}: {e}")
+            return []
 
     def is_message_banned(message, banned_words):
         # Check message content
