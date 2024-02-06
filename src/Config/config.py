@@ -20,3 +20,9 @@ class DiscordConfig:
         dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
         prefix = str(colored(dt_string, "dark_grey")) + str(colored(" The Eternal || ", "cyan"))
         return prefix
+    
+    def getDatabasePrefix():
+        now = datetime.now()
+        dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+        prefix = str(colored(dt_string, "dark_grey")) + str(colored(" Database || ", "light_green"))
+        return prefix

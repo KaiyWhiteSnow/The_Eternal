@@ -21,4 +21,5 @@ class ActionHandler:
                 return
             if Functions.is_message_banned(message, Functions.load_banned_phrases("C:/Users/Kaiy/Documents/GitHub/The_Eternal/src/Config/banned.txt")) == True:
                 await message.delete()
+                # TODO: session_instance.query()
                 await message.channel.send(f"Get automoded idiot {message.author.mention}")
