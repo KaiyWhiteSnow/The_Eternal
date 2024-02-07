@@ -19,12 +19,15 @@ class CommandHandler:
         async def example(interaction: discord.Interaction):
             await interaction.response.send_message(f"Hello {interaction.user.display_name}")
 
-        @self.tree.command(name="syncdatabase", description="Manually synchronises database with all users")
+        @self.tree.command(name="syncdatabase", description="Manually synchronizes database with all users")
         @commands.has_role("The Kaiy")
         async def syncDatabaseManually(interaction: discord.Interaction):
-            
-            from Main import client, session_instance
+            from Main import session_instance, client
             from Database.Database import Database
-            guild = client.get_guild(1135876521316327490)
-            users = guild.members
-            await Database.syncDatabase(session_instance, users)
+            guild = interaction.guild
+
+            members = [m async for m in guild.fetch_members()]
+            
+            await Database.syncDatabase(session_instance, members)
+            await interaction.response.send_message("Database synchronized successfully.")
+    
