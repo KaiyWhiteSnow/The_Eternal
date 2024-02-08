@@ -1,5 +1,6 @@
 {
     "python.analysis.autoImportCompletions": false,
     "python.analysis.typeCheckingMode": "off",
-    "python.languageServer": "Pylance"
+    "python.languageServer": "Pylance",
+    "explorer.excludeGitIgnore": false
 }
