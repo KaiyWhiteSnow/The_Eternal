@@ -16,15 +16,6 @@
 - [License](#warning-license)
 - [Contact](#handshake-contact)
 
-
-## :star2: About the Project
-<details> <summary>Server</summary> <ul>
-<li><a href="">Self hosted</a></li>
-</ul> </details>
-<details> <summary>Database</summary> <ul>
-<li><a href="">SQLite</a></li>
-</ul> </details>
-
 ### :dart: Features
 - Create, edit, and manage your own builder space
 - Moderate users
@@ -110,10 +101,10 @@ Please read the [Code of Conduct](https://github.com/KaiyWhiteSnow/The_Eternal/b
 
 ## :warning: License
 
-Distributed under the no License. See LICENSE.txt for more information.
+Distributed under the MIT License. See LICENSE.txt for more information.
 
 ## :handshake: Contact
 
-KaiyWhiteSnow - -
+Discord: KaiyWhiteSnow - [Steam](https://steamcommunity.com/id/TheUnknownKaiy)
 
 Project Link: [https://github.com/KaiyWhiteSnow/The_Eternal](https://github.com/KaiyWhiteSnow/The_Eternal)
