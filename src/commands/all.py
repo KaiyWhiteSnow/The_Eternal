@@ -1,4 +1,5 @@
 from typing import List
+from random import randint
 
 import discord
 from discord.ext import commands
@@ -11,6 +12,7 @@ from ..database.models.warning import WarningModel
 class All(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
+
 
     @commands.hybrid_command(
         name="warnings",
@@ -48,6 +50,8 @@ class All(commands.Cog):
             + "\n- ".join(warnings_text),
             ephemeral=True,
         )
+        
+        
     @commands.hybrid_command(
         name="createclan",
         usage="createclan <clan Name>",
@@ -62,7 +66,15 @@ class All(commands.Cog):
 
         # Create roles and give access to the category
         role = await ctx.guild.create_role(name=f"{clan}_role")
+        leader_role = await ctx.guild.create_role(name=f"{clan}_leader_role")  # New line for leader role
         await category.set_permissions(role, read_messages=True, connect=True)
+        await category.set_permissions(leader_role, read_messages=True, connect=True)  # Give leader role access
+
+        coleader_role = await ctx.guild.create_role(name=f"{clan}_coleader_role")
+        await category.set_permissions(coleader_role, read_messages=True, connect=True)  # Give co-leader role access       
+
+        # Assign the leader role to the person who initiated the command
+        await ctx.author.add_roles(leader_role)
 
         await ctx.channel.send(f"Creating channels for: {clan}")
 
@@ -73,7 +85,8 @@ class All(commands.Cog):
         await ctx.guild.create_voice_channel(clan+" voice", category=category)
 
         await ctx.channel.send(f"Channels created for: {clan}")
-        
+
+
     @commands.hybrid_command(
         name="removeclan",
         usage="removeclan <Team Name>",
@@ -88,14 +101,76 @@ class All(commands.Cog):
             for channel in category.channels:
                 await channel.delete()
 
+            # Delete roles associated with the clan
+            for role in ctx.guild.roles:
+                if role.name.startswith(clan):
+                    await role.delete()
+
             # Delete the category
             await category.delete()
             
-            await ctx.send(f"Clan {clan} removed.")
+            await ctx.send(f"Clan {clan} removed, including roles.")
         else:
             await ctx.send(f"Clan {clan} not found.")
 
 
+    @commands.hybrid_command(
+        name="dice",
+        usage="dice <Number of sides>",
+        description="Rolls a dice with specified number of sides",
+    )
+    async def dice(self, ctx: commands.Context, numofsides: int = 6):
+        roll: int = randint(0, numofsides)
+        await ctx.send(f"The magical dice rolled {roll} for {ctx.author.display_name}")
+    
+    @commands.hybrid_command(
+        name="addcoleader",
+        usage="/addcoleader <member object>",
+        description="Adds a coleader to your clan"
+    )
+    async def add_coleader(self, ctx: commands.Context, member: discord.Member):
+        # Check if the command invoker has the required role
+        clan_leader_role = next((role for role in ctx.author.roles if role.name.endswith("_leader_role")), None)
+        
+        if clan_leader_role is None:
+            await ctx.send("You do not have the required leader role.")
+            return
+        
+        # Extract clan name from the leader's role name
+        clan_name = clan_leader_role.name.split("_")[0]
+        
+        coleader_role_name = f"{clan_name}_coleader_role"
+        coleader_role = discord.utils.get(ctx.guild.roles, name=coleader_role_name)
+        
+        if coleader_role is None:
+            await ctx.send(f"Error: Co-leader role ({coleader_role_name}) not found.")
+            return
 
+        # Assign the co-leader role to the specified member
+        await member.add_roles(coleader_role)
+        
+        await ctx.send(f"{member.mention} has been added as a co-leader to the {clan_name} clan.")
+                
+    
+    @commands.hybrid_command(
+        name="addmember", 
+        usage="/addmember <member name>", 
+        description="Adds member to your clan",
+    )
+    async def addmember(self, ctx: commands.Context, member: discord.Member):
+        
+        clan_leader_role = next((role for role in ctx.author.roles if role.name.endswith("_leader_role") or role.name.endswith("_coleader_role")), None)
+
+        if clan_leader_role is None:
+            await ctx.send("You do not have the required leader role.")
+            return
+        # Extract clan name from the leader's role name
+        clan_name = clan_leader_role.name.split("_")[0]
+        
+        role_name = f"{clan_name}_role"
+        clan_role = discord.utils.get(ctx.guild.roles, name=role_name)
+        
+        await member.add_roles(clan_role)
+        
 async def setup(bot: commands.Bot):
     await bot.add_cog(All(bot))

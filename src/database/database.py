@@ -23,7 +23,7 @@ Base.metadata.create_all(engine)
 
 # Function to get a session with rollback capability
 @contextmanager
-def get_session() -> Session:
+def get_session() -> Session: # type: ignore
     session = Session()
     try:
         yield session
