@@ -1,6 +1,6 @@
 <div align='center'>
-
-<h1>Discord moderation bot</h1>
+<h1>The Eternal</h1>
+<h2>Discord moderation bot</h2>
 <p>A discord bot made specifically for discord server Eternalister focused on building and improving in the videogame called rust</p>
 
 <h4> <span> · </span> <a href="https://github.com/KaiyWhiteSnow/The_Eternal/blob/master/README.md"> Documentation </a> <span> · </span> <a href="https://github.com/KaiyWhiteSnow/The_Eternal/issues"> Report Bug </a> <span> · </span> <a href="https://github.com/KaiyWhiteSnow/The_Eternal/issues"> Request Feature </a> </h4>
