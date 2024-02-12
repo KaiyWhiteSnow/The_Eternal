@@ -48,6 +48,53 @@ class All(commands.Cog):
             + "\n- ".join(warnings_text),
             ephemeral=True,
         )
+    @commands.hybrid_command(
+        name="createclan",
+        usage="createclan <clan Name>",
+        description="Creates roles and channels for specified clan",
+    )
+    async def createclan(self, ctx: commands.Context, clan: str):
+        # Create category
+        category = await ctx.guild.create_category("==="+clan+"===")
+
+        # Deny all roles access to the category
+        await category.set_permissions(ctx.guild.default_role, read_messages=False, connect=False)
+
+        # Create roles and give access to the category
+        role = await ctx.guild.create_role(name=f"{clan}_role")
+        await category.set_permissions(role, read_messages=True, connect=True)
+
+        await ctx.channel.send(f"Creating channels for: {clan}")
+
+        # Create text and voice channels within the category
+        await ctx.guild.create_text_channel(clan+"-general", category=category)
+        await ctx.guild.create_text_channel(clan+"-config", category=category)
+        await ctx.guild.create_text_channel(clan+"-bases", category=category)
+        await ctx.guild.create_voice_channel(clan+" voice", category=category)
+
+        await ctx.channel.send(f"Channels created for: {clan}")
+        
+    @commands.hybrid_command(
+        name="removeclan",
+        usage="removeclan <Team Name>",
+        description="Removes roles, channels, and category for the specified team",
+    )
+    async def removeclan(self, ctx: commands.Context, clan: str):
+        # Find the category associated with the clan
+        category = discord.utils.get(ctx.guild.categories, name="==="+clan+"===")
+
+        if category:
+            # Delete channels within the category
+            for channel in category.channels:
+                await channel.delete()
+
+            # Delete the category
+            await category.delete()
+            
+            await ctx.send(f"Clan {clan} removed.")
+        else:
+            await ctx.send(f"Clan {clan} not found.")
+
 
 
 async def setup(bot: commands.Bot):
