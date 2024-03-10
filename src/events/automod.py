@@ -5,9 +5,9 @@ from typing import List
 import discord
 from discord.ext import commands
 
-from ..config.automod_config import BANNED_WORDS
-from ..database import get_session
-from ..database.models.warning import WarningModel
+from ..Config.automod_config import BANNED_WORDS
+from ..Database import get_session
+from ..Database.Models.warning import WarningModel
 
 
 def remove_non_standard_characters(s: str) -> str:

@@ -4,8 +4,8 @@ import logging
 import discord
 from discord.ext import commands
 
-from .config import logger_config
-from .config.discord_config import BOT_PREFIX
+from .Config import logger_config
+from .Config.discord_config import BOT_PREFIX
 
 # Configure loggers - This must run before SQLAlchemy is initialized
 logger_config.configure_logger(
@@ -18,7 +18,7 @@ logger_config.configure_logger(
     ]
 )
 
-from .database import get_session
+from .Database import get_session
 
 logger: logging.Logger = logging.getLogger("Eternal.Main")
 
@@ -29,8 +29,8 @@ bot: commands.Bot = commands.Bot(BOT_PREFIX, intents=intents)
 
 async def load_extensions():
     await bot.load_extension(__package__ + ".events.automod")
-    await bot.load_extension(__package__ + ".commands.all")
-
+    await bot.load_extension(__package__ + ".Commands.all")
+    await bot.load_extension(__package__ + ".Commands.transcript")
 
 asyncio.run(load_extensions())
 

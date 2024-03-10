@@ -5,8 +5,8 @@ import discord
 from discord.ext import commands
 from sqlalchemy import desc, func
 
-from ..database import get_session
-from ..database.models.warning import WarningModel
+from ..Database import get_session
+from ..Database.Models.warning import WarningModel
 
 
 class All(commands.Cog):

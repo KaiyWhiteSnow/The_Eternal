@@ -13,9 +13,9 @@ Session = sessionmaker(bind=engine)
 # Create declarative base
 Base = declarative_base()
 
-from .models.ban import BanModel  # noqa
+from .Models.ban import BanModel  # noqa
 # Import models here
-from .models.warning import WarningModel  # noqa
+from .Models.warning import WarningModel  # noqa
 
 # Create tables
 Base.metadata.create_all(engine)
