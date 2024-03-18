@@ -4,21 +4,21 @@ import logging
 import discord
 from discord.ext import commands
 
-from .Config import logger_config
-from .Config.discord_config import BOT_PREFIX
+from .config import logger_config
+from .config.discord_config import BOT_PREFIX
 
 # Configure loggers - This must run before SQLAlchemy is initialized
 logger_config.configure_logger(
     [
         "Eternal.Main",
-        "Eternal.Database",
+        "Eternal.database",
         "sqlalchemy",
         "discord",
         "discord.http",
     ]
 )
 
-from .Database import get_session
+from .database import get_session
 
 logger: logging.Logger = logging.getLogger("Eternal.Main")
 
@@ -28,9 +28,9 @@ bot: commands.Bot = commands.Bot(BOT_PREFIX, intents=intents)
 
 
 async def load_extensions():
-    await bot.load_extension(__package__ + ".events.automod")
-    await bot.load_extension(__package__ + ".Commands.all")
-    await bot.load_extension(__package__ + ".Commands.transcript")
+    await bot.load_extension(f"{__package__}.events.automod")
+    await bot.load_extension(f"{__package__}.commands.all")
+    await bot.load_extension(f"{__package__}.commands.transcript")
 
 asyncio.run(load_extensions())
 
@@ -45,10 +45,10 @@ async def on_ready():
     logger.debug("Commands synced!")
     # Announce version info and set status
     logger.info("Running discord.py %s", discord.__version__)
-    logger.info("We have logged in as %s", bot.user.name)
+    logger.info("We have logged in as %s", bot.user.name) # type: ignore
     await bot.change_presence(
-        activity=discord.Activity(
-            type=discord.ActivityType.watching, name=f"over Eternalister"
+            activity=discord.Activity(
+            type=discord.ActivityType.watching, name="over Eternalister"
         )
     )
     logger.info("Ready!")

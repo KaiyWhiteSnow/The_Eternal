@@ -5,9 +5,9 @@ from typing import List
 import discord
 from discord.ext import commands
 
-from ..Config.automod_config import BANNED_WORDS
-from ..Database import get_session
-from ..Database.Models.warning import WarningModel
+from ..config.automod_config import BANNED_WORDS
+from ..database import get_session
+from ..database.models.warning import WarningModel
 
 
 def remove_non_standard_characters(s: str) -> str:
@@ -23,14 +23,14 @@ class AutoModeration(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
-        author: discord.Member = message.author
+        author: discord.Member = message.author # type: ignore
         content: str = message.content
-        channel: discord.TextChannel = message.channel
+        channel: discord.TextChannel = message.channel # type: ignore
         if self.is_string_blacklisted(content.lower()):
             await message.delete()
             # Warn the sender
             warning = WarningModel(
-                author, self.bot.user, "Sending inappropriate messages (Automod)"
+                author, self.bot.user, "Sending inappropriate messages (Automod)" # type: ignore
             )
             with get_session() as session:
                 session.add(warning)
@@ -59,7 +59,7 @@ class AutoModeration(commands.Cog):
             await member.edit(nick="Moderated Nickname")
             # Warn the member
             warning = WarningModel(
-                member, self.bot.user, "Inappropriate nickname or username (Automod)"
+                member, self.bot.user, "Inappropriate nickname or username (Automod)" # type: ignore
             )
             with get_session() as session:
                 session.add(warning)
@@ -68,9 +68,7 @@ class AutoModeration(commands.Cog):
     def is_string_blacklisted(self, s: str) -> bool:
         s = remove_non_standard_characters(s)
         pattern = "|".join(self.banned_words)
-        if re.search(pattern, s):
-            return True
-        return False
+        return bool(re.search(pattern, s))
 
 
 async def setup(bot: commands.Bot):

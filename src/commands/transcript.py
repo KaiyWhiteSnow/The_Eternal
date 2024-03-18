@@ -33,10 +33,10 @@ class Transcripts(commands.Cog):
         if not attachments:
             return ""
 
-        attachment_list = []
-        for attachment in attachments:
-            attachment_list.append(f'<img src="{discord.utils.escape_markdown(attachment.url)}" style="max-width: 800px; max-height: 600px; margin: 5px" alt="Attachment">')
-
+        attachment_list = [
+            f'<img src="{discord.utils.escape_markdown(attachment.url)}" style="max-width: 800px; max-height: 600px; margin: 5px" alt="Attachment">'
+            for attachment in attachments
+        ]
         return " ".join(attachment_list)
 
 
@@ -47,12 +47,12 @@ class Transcripts(commands.Cog):
     )
     async def transcriptchannel(self, ctx: commands.Context, channel: discord.TextChannel):
         threads = channel.archived_threads()
-        
+
         async for thread in threads:
             with open(os.path.join(self.out_dir, f"{thread.name}.html"), "w", encoding="utf-8") as file:
                 # Creating head tag
                 file.write(
-                    f'''<head> 
+                    '''<head> 
                     <meta charset="UTF-8"> 
                     <meta name="viewport" 
                     content="width=device-width, 

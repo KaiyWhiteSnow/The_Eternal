@@ -43,12 +43,14 @@ file_handler.setFormatter(
 console_handler.setFormatter(formatter)
 
 
-def configure_logger(loggers: List[str] = []):
+def configure_logger(loggers: List[str] = None): # type: ignore
     """Configures loggers to follow The Eternal's logging format.
     
     Args:
         loggers (List[str]): A list of logger names to configure.
     """
+    if loggers is None:
+        loggers = []
     for logger_name in loggers:
         logger = logging.getLogger(logger_name)
         logger.setLevel(logging.INFO)
