@@ -3,6 +3,10 @@ from discord.ext import commands
 
 
 class Minigames(commands.Cog):
+    def __init__(self, bot: commands.Bot):
+        self.bot = bot
+
+
     @commands.hybrid_command(
         name="dice",
         usage="dice <Number of sides>",

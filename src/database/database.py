@@ -13,8 +13,8 @@ Session = sessionmaker(bind=engine)
 # Create declarative base
 Base = declarative_base()
 
-from .models.ban import BanModel  # noqa
 # Import models here
+from .models.ban import BanModel  # noqa
 from .models.warning import WarningModel  # noqa
 
 # Create tables
