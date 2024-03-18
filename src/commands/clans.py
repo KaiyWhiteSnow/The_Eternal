@@ -1,57 +1,12 @@
-from typing import List
-from random import randint
-
 import discord
 from discord.ext import commands
-from sqlalchemy import desc, func
-
-from ..database import get_session
-from ..database.models.warning import WarningModel
+import os
 
 
-class All(commands.Cog):
+class Clans(commands.Cog):
     def __init__(self, bot: commands.Bot):
         self.bot = bot
-
-
-    @commands.hybrid_command(
-        name="warnings",
-        usage="warnings <member>",
-        description="Shows all warnings for the specified user",
-    )
-    @commands.guild_only()
-    @commands.has_permissions(moderate_members=True)
-    @commands.cooldown(1, 2, commands.BucketType.member)
-    async def warnings(self, ctx: commands.Context, member: discord.Member):
-        warnings: List[WarningModel] = []
-        warnings_text: List[str] = ["none :)"]
-        with get_session() as session:
-            warnings = (
-                session.query(WarningModel)
-                .filter_by(memberId=member.id)
-                .order_by(desc(WarningModel.time)) # type: ignore
-                .limit(50)
-                .all()
-            )
-            warning_count = (
-                session.query(func.count(WarningModel.warningId))
-                .filter_by(memberId=member.id)
-                .scalar()
-            )
-            if len(warnings) > 0:
-                warnings_text: List[str] = [
-                    f"<t:{round(warning.time.timestamp())}> {warning.reason}"
-                    for warning in warnings
-                ]
-        # TODO: If a member has way too many warnings, we might need to handle messages longer than 2000 chars by sending multiple messages.
-        # The terrible ternary will add "(showing at most 50 latest)" to the message if the user has more than 50 warnings
-        await ctx.send(
-            f"{member.mention} has {warning_count} total warnings{' (showing at most 50 latest)' if warning_count > 50 else ''}: \n- "
-            + "\n- ".join(warnings_text),
-            ephemeral=True,
-        )
-        
-        
+    
     @commands.hybrid_command(
         name="createclan",
         usage="createclan <clan Name>",
@@ -112,16 +67,10 @@ class All(commands.Cog):
         else:
             await ctx.send(f"Clan {clan} not found.")
 
+        "--------------------------------------"    
+        """ Clans related commands end here! """
+        "--------------------------------------"
 
-    @commands.hybrid_command(
-        name="dice",
-        usage="dice <Number of sides>",
-        description="Rolls a dice with specified number of sides",
-    )
-    async def dice(self, ctx: commands.Context, numofsides: int = 6):
-        roll: int = randint(0, numofsides)
-        await ctx.send(f"The magical dice rolled {roll} for {ctx.author.display_name}")
-    
     @commands.hybrid_command(
         name="addcoleader",
         usage="/addcoleader <member object>",
@@ -170,6 +119,8 @@ class All(commands.Cog):
         clan_role = discord.utils.get(ctx.guild.roles, name=role_name) # type: ignore
         
         await member.add_roles(clan_role) # type: ignore
-        
+
+
 async def setup(bot: commands.Bot):
-    await bot.add_cog(All(bot))
+    await bot.add_cog(Clans(bot))
+    

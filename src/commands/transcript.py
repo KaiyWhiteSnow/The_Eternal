@@ -1,4 +1,3 @@
-from pyexpat.errors import messages
 import discord
 from discord.ext import commands
 import os

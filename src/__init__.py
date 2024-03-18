@@ -29,8 +29,10 @@ bot: commands.Bot = commands.Bot(BOT_PREFIX, intents=intents)
 
 async def load_extensions():
     await bot.load_extension(f"{__package__}.events.automod")
-    await bot.load_extension(f"{__package__}.commands.all")
+    await bot.load_extension(f"{__package__}.commands.administration")
     await bot.load_extension(f"{__package__}.commands.transcript")
+    await bot.load_extension(f"{__package__}.commands.clans")
+    await bot.load_extension(f"{__package__}.commands.minigames")
 
 asyncio.run(load_extensions())
 
