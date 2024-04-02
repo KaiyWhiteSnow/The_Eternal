@@ -29,6 +29,7 @@ bot: commands.Bot = commands.Bot(BOT_PREFIX, intents=intents)
 
 async def load_extensions():
     await bot.load_extension(f"{__package__}.events.automod")
+    await bot.load_extension(f"{__package__}.events.jokes")
     await bot.load_extension(f"{__package__}.commands.administration")
     await bot.load_extension(f"{__package__}.commands.transcript")
     await bot.load_extension(f"{__package__}.commands.clans")
