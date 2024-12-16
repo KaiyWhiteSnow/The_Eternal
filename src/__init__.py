@@ -29,11 +29,10 @@ bot: commands.Bot = commands.Bot(BOT_PREFIX, intents=intents)
 
 async def load_extensions():
     await bot.load_extension(f"{__package__}.events.automod")
-    await bot.load_extension(f"{__package__}.events.jokes")
     await bot.load_extension(f"{__package__}.commands.administration")
     await bot.load_extension(f"{__package__}.commands.transcript")
-    await bot.load_extension(f"{__package__}.commands.clans")
     await bot.load_extension(f"{__package__}.commands.minigames")
+    await bot.load_extension(f"{__package__}.commands.music.modules.default")
 
 asyncio.run(load_extensions())
 
@@ -51,7 +50,7 @@ async def on_ready():
     logger.info("We have logged in as %s", bot.user.name) # type: ignore
     await bot.change_presence(
             activity=discord.Activity(
-            type=discord.ActivityType.watching, name="over Eternalister"
+            type=discord.ActivityType.watching, name="over Emerald Light"
         )
     )
     logger.info("Ready!")
